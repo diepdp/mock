@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Add Airline Information</title>
+	<link rel="stylesheet" th:href="@{/fontawesome/css/all.css}">
+	<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+	<link rel="stylesheet" th:href="@{/bootstrap/css/style.css}">
+</head>
+
+<body>
+	<div class="container bg-container" style="max-width: 1140px;">
+		<div id="header" class="row" style="background-color: #bdbdbd">
+			<div id="header-content" class="col-12 d-flex align-items-center ml-4">
+				<div id="close-button">
+					<div id="minus-icon" class="h-100 w-100 d-flex justify-content-center align-items-center">
+						<i class="fa-solid fa-minus fa-xs" style="color: #ffffff;"></i>
+					</div>
+				</div>
+				<div class="h5 mx-2 mt-2" style="color: #0c535d"> Add Airline Information...</div>
+			</div>
+		</div>
+
+		<form th:action="@{/airline/save}" method="POST" th:object="${airline}">
+			<div class="row my-4 border-row mb-1" style="margin: 0 2px;">
+				<div class="col-12 mb-2 mt-4">
+					<div class="row">
+						<div class="col-2">
+							<label for="" class="m-0 h6">Airline Code<span class="text-danger">*</span>
+								:
+							</label>
+						</div>
+						<div class="col d-flex flex-column">
+							<input type="text" style="width: 190px;" name="airlineCode" maxlength="5" th:field="*{airlineCode}" id="code">
+							<span class="text-danger mt-1" id="errorCode"></span>
+							<span class="text-danger" th:if="${#fields.hasErrors('airlineCode')}"
+								th:errors="*{airlineCode}"></span>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 mb-2">
+					<div class="row">
+						<div class="col-2">
+							<label for="" class="m-0 h6">Airline Name<span class="text-danger">*</span>
+								:
+							</label>
+						</div>
+						<div class="col d-flex flex-column">
+							<input type="text" style="width: 190px;" name="airlineName" maxlength="45" th:field="*{airlineName}" id="name">
+							<span class="text-danger" id="errorName"></span>
+							<span class="text-danger" th:if="${#fields.hasErrors('airlineName')}"
+								th:errors="*{airlineName}"></span>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 mb-2">
+					<div class="row">
+						<div class="col-2">
+							<label for="" class="m-0 h6">Wholesaler PCC :
+							</label>
+						</div>
+						<div class="col d-flex flex-column">
+							<input type="text" style="width: 190px;" name="wholesaler" maxlength="5" th:field="*{wholesalerPCC}" id="wholesaler">
+							<span class="text-danger" id="errorWholesaler"></span>
+							<span class="text-danger" th:if="${#fields.hasErrors('wholesalerPCC')}"
+								th:errors="*{wholesalerPCC}"></span>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 mb-2">
+					<div class="row">
+						<div class="col-2">
+							<label for="" class="m-0 h6">Contact Number<span class="text-danger">*</span>
+								:
+							</label>
+							</label>
+						</div>
+						<div class="col d-flex flex-column">
+							<div>
+								<input type="text" style="width: 190px;" name="contactNumber" maxlength="9" th:field="*{contactNumber}"
+									id="number">
+								<span class="h6 mt-3 col-7" style="padding-left: 0px;">(eg. +650123456)</span>
+							</div>
+							<span class="text-danger" id="errorNumber"></span>
+							<span class="text-danger" th:if="${#fields.hasErrors('contactNumber')}"
+								th:errors="*{contactNumber}"></span>
+						</div>
+					</div>
+				</div>
+				<input type="hidden" th:attr="value=*{id}" id="id">
+				<div class="col-12 mb-2">
+					<div class="row">
+						<div class="col-2">
+							<label for="" class="m-0 h6">Email
+									:
+								</label>
+						</div>
+						<div class="col d-flex flex-column">
+							<div>
+								<input type="text" style="width: 190px;" name="email" maxlength="50" th:field="*{email}" id="email">
+								<span class="h6 mt-3 col-7" style="padding-left: 0px;">(eg. abc@fpt.com)</span>
+							</div>
+							<span class="text-danger" id="errorEmail"></span>
+							<span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-6 mt-2">
+					<div class="d-flex justify-content-center mb-3">
+						<button type="reset" class="px-4 mx-1" id="btn-reset"
+							style="border: 2px solid #487197; border-radius: 5px;">Clear</button>
+						<button type="submit" class="px-4 mx-1" id="btn-add"
+							style="border: 2px solid #487197; border-radius: 5px;">
+							<a style="color: black; text-decoration: none;">Add</a></button>
+						<button class="px-4 mx-1" id="btn-cancel"
+							style="border: 2px solid #487197; border-radius: 5px;">
+							<a th:href="@{/airline/list}" style="color: black; text-decoration: none;">Cancel</a>
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<script th:src="@{/jQuery/code.jquery.com_jquery-3.7.0.min.js}"></script>
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+	<!--
+	-->
+	<script th:src="@{/bootstrap/js/main.js}"></script>
+</body>
+
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>List Airline</title>
+	<link rel="stylesheet" th:href="@{/fontawesome/css/all.css}">
+	<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+	<link rel="stylesheet" th:href="@{/bootstrap/css/list.css}">
+	<link th:href="@{/bootstrap/css/select2.css}" rel="stylesheet" />
+</head>
+
+<body>
+	<div class="container bg-container" style="max-width: 1140px;">
+		<div id="header" class="row" style="background-color: #bdbdbd">
+			<div id="header-content" class="col-12 d-flex align-items-center ml-2">
+				<div id="close-button">
+					<div id="minus-icon" class="h-100 w-100 d-flex justify-content-center align-items-center">
+						<i class="fa-solid fa-minus fa-xs" style="color: #ffffff;"></i>
+					</div>
+				</div>
+				<div class="h5 mx-2 mt-2" style="color: #0c535d"> List Airlines...</div>
+			</div>
+		</div>
+		<div class="row" style="margin-top: 40px;">
+			<div class="col-12 mb-4 d-flex align-items-center">
+				<form th:action="@{/airline/filter}" method="GET" style="height: 35px;" id="abc">
+					<label style="font-size: 18px; margin-bottom: 0;" class="h6">Airline Name :</label>
+					<select class="js-select2" style="width: 285px; height: 30px;" name="code" id="select-name">
+						<option value="All">-------------- All -----------------</option>
+						<option th:each="item : ${listCode}" th:value="${item.airlineCode}"
+							th:text="${item.airlineName}+ ' - ' +${item.airlineCode}">
+					</select>
+					<button class="px-4 ml-2 acti" id="btn-filter" type="submit"
+						style="border: 2px solid #afafaf; border-radius: 5px;">Filter</button>
+				</form>
+
+			</div>
+			<div class="col-12">
+				<table style="width: 100%" class="table table-striped custom-table">
+					<thead class="text-center bg-header">
+						<tr>
+							<th style="width: 20%;">Airline Code</th>
+							<th style="width: 20%;">Airline Name</th>
+							<th style="width: 20%;">Wholesaler PCC</th>
+							<th style="width: 20%;">Contact Number</th>
+							<th style="width: 20%;">Email</th>
+						</tr>
+					</thead>
+					<tbody class="text-center">
+						<tr th:if="${message} != null">
+							<td colspan="5" th:text="${message}" class="text-danger"></td>
+						</tr>
+						<tr th:each="airline,index : ${airlines}" th:class="${airline.id == id ? 'focus' : ''}">
+							<td>
+								<a th:href="@{update/{id}(id=${airline.id}, airlineCode=${airline.airlineCode}, airlineName=${airline.airlineName}
+								, wholesalerPCC=${airline.wholesalerPCC}, contactNumber=${airline.contactNumber}, email=${airline.email})}"
+									th:text="${airline.airlineCode}"
+									style="text-decoration: underline; color:#2c22fc;"></a>
+							</td>
+							<td th:text="${airline.airlineName}"></td>
+							<td th:text="${airline.wholesalerPCC}"></td>
+							<td th:text="${airline.contactNumber}"></td>
+							<td th:text="${airline.email}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-2">
+				<button class="px-4" style="border: 2px solid #487197; border-radius: 5px;">
+					<a th:href="@{/airline/add}" style="color: black; text-decoration: none;">Add</a>
+				</button>
+			</div>
+			<div class="col-10 d-flex justify-content-end">
+
+				<nav th:class="${message} != null ? 'd-none':''">
+					<ul class="pagination pagination-sm">
+						<li class="page-item mr-1 bd rounded-0" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+							<a th:href="@{/airline/list(page=0)}" class="page-link rounded-0" style="color: #979697;"
+								aria-current="page">
+								<i class="fa-solid fa-backward-step"></i>
+							</a>
+						</li>
+						<li class="page-item mr-1 bd" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+							<a class="page-link" style="color: #979697;"
+								th:href="@{/airline/list(page=__${currentPage}__-1)}" aria-label="Previous">
+								<i class="fa-solid fa-backward"></i>
+							</a>
+						</li>
+						<li class="page-item mr-1 bd" th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
+							th:classappend="${currentPage == pageNumber ? 'work' : ''}">
+							<a class="page-link" th:href="@{/airline/list(page=__${pageNumber}__)}"
+								th:text="${pageNumber+1}"></a>
+						</li>
+						<li class="page-item mr-1 bd"
+							th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+							<a class="page-link" style="color: #979697;"
+								th:href="@{/airline/list(page=__${currentPage}__+1)}" aria-label="Next">
+								<i class="fa-solid fa-forward"></i>
+							</a>
+						</li>
+						<li class="page-item mr-1 bd"
+							th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+							<a class="page-link rounded-0" style="color: #979697;"
+								th:href="@{/airline/list(page=__${totalPages}__-1)}">
+								<i class="fa-solid fa-forward-step"></i>
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="modal p-4" id="confirmModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header px-1 py-0 d-flex align-items-center">
+					<h5 class="modal-title">[Javascript Application]</h5>
+					<button type="button" class="closed" data-dismiss="modal" aria-label="Close">
+						<img id="close-img" src="/bootstrap/img/close-window.png" alt="close"
+							style="width:40px; height: 40px;">
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="d-flex align-items-center">
+						<img src="/bootstrap/img/small-help.png" alt="close">
+						<p class="m-0 text-danger" th:text="${error}"></p>
+						<p class="m-0 text-danger" th:text="${successfully}"></p>
+					</div>
+					<div class="d-flex justify-content-center mt-3">
+						<button type="button" class="button-modal" id="returnlist">OK</button>
+						<button type="button" class="cancel button-modal ml-3" data-dismiss="modal">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script th:src="@{/jQuery/code.jquery.com_jquery-3.7.0.min.js}"></script>
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+	<script th:src="@{/bootstrap/js/select2.js}"></script>
+	<script th:src="@{/bootstrap/js/list.js}"></script>
+
+	<script th:inline="javascript">
+		var showModal = /*[[${showModal}]]*/ false;
+		if (showModal) {
+			$('#confirmModal').modal('show');
+		}
+
+		var updateMessage = /*[[${successfully}]]*/ null;
+		if (updateMessage) {
+			$('#confirmModal').modal('show');
+		}
+
+		$('#returnlist').click(function () {
+			location.reload();
+		});
+		
+		$(".js-select2").on("keydown", function(event) {
+		if (event.key === "Enter") {
+			event.preventDefault();
+			$("#abc").submit(); 
+		}
+	});
+
+	</script>
+</body>
+
+</html>
